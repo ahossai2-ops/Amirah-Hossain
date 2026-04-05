@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amirah Aribah Hossain — Marketing & Brand Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  /* ─── TOKENS ─── */
+  :root {
+    --navy:   #0d1f3c;
+    --navy2:  #142b52;
+    --gold:   #c9922b;
+    --gold2:  #f0b94a;
+    --cream:  #fdf8f2;
+    --smoke:  #f4efe8;
+    --ink:    #1a1a2a;
+    --muted:  #6b6b7e;
+    --white:  #ffffff;
+    --radius: 4px;
+    --ease:   cubic-bezier(.16,1,.3,1);
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body:    'DM Sans', sans-serif;
+    --font-mono:    'DM Mono', monospace;
+  }
+
+  /* ─── RESET ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity .8s var(--ease), transform .8s var(--ease);
+  }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal-left  { opacity:0; transform:translateX(-40px); transition:opacity .8s var(--ease),transform .8s var(--ease); }
+  .reveal-right { opacity:0; transform:translateX(40px);  transition:opacity .8s var(--ease),transform .8s var(--ease); }
+  .reveal-left.in,.reveal-right.in { opacity:1; transform:none; }
+  .delay-1 { transition-delay:.1s; }
+  .delay-2 { transition-delay:.2s; }
+  .delay-3 { transition-delay:.3s; }
+  .delay-4 { transition-delay:.4s; }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw;
+    height: 64px;
+    background: transparent;
+    transition: background .4s, box-shadow .4s;
+  }
+  nav.scrolled {
+    background: rgba(13,31,60,.96);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 24px rgba(0,0,0,.18);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--white);
+    letter-spacing: .02em;
+  }
+  .nav-logo span { color: var(--gold2); }
+  .nav-links {
+    display: flex; gap: 2.4rem; list-style: none;
+  }
+  .nav-links a {
+    font-size: .8rem;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.75);
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--gold2); }
+  .nav-cta {
+    padding: .45rem 1.2rem;
+    border: 1.5px solid var(--gold);
+    border-radius: 2px;
+    color: var(--gold2) !important;
+    transition: background .2s, color .2s !important;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--navy) !important; }
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+  .hamburger span { display:block; width:24px; height:2px; background:var(--white); border-radius:2px; transition:.3s; }
+  .mobile-menu {
+    display:none; position:fixed; inset:0; z-index:99;
+    background:var(--navy); flex-direction:column;
+    align-items:center; justify-content:center; gap:2.5rem;
+  }
+  .mobile-menu.open { display:flex; }
+  .mobile-menu a { font-size:1.8rem; font-family:var(--font-display); color:var(--white); }
+  .mobile-menu a:hover { color:var(--gold2); }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    background: var(--navy);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  /* diagonal grid lines */
+  .hero-bg::before {
+    content:'';
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(201,146,43,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,146,43,.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-bg::after {
+    content:'';
+    position:absolute;
+    width:600px; height:600px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(201,146,43,.12) 0%, transparent 70%);
+    top:-100px; right:-100px;
+    pointer-events:none;
+  }
+  .hero-content {
+    padding: 120px 0 80px 8vw;
+    z-index: 1; position: relative;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--gold2);
+    border: 1px solid rgba(201,146,43,.35);
+    padding: .35rem .9rem;
+    margin-bottom: 2rem;
+    border-radius: 2px;
+  }
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 5.5vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 1.2rem;
+  }
+  .hero-name em {
+    font-style: italic;
+    color: var(--gold2);
+  }
+  .hero-tagline {
+    font-size: clamp(.95rem, 1.4vw, 1.15rem);
+    font-weight: 300;
+    color: rgba(255,255,255,.65);
+    max-width: 420px;
+    line-height: 1.7;
+    margin-bottom: 2.8rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-block;
+    padding: .85rem 2rem;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 500;
+    font-size: .88rem;
+    letter-spacing: .05em;
+    border-radius: 2px;
+    transition: background .2s, transform .2s;
+  }
+  .btn-primary:hover { background: var(--gold2); transform: translateY(-2px); }
+  .btn-outline {
+    display: inline-block;
+    padding: .85rem 2rem;
+    border: 1.5px solid rgba(255,255,255,.3);
+    color: rgba(255,255,255,.8);
+    font-size: .88rem;
+    letter-spacing: .05em;
+    border-radius: 2px;
+    transition: border-color .2s, color .2s, transform .2s;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold2); transform: translateY(-2px); }
+
+  .hero-visual {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    padding: 120px 8vw 80px 0;
+  }
+  .hero-card {
+    width: min(320px, 80%);
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(201,146,43,.2);
+    border-radius: 6px;
+    padding: 2.4rem;
+    backdrop-filter: blur(8px);
+  }
+  .hero-card-label {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.4rem;
+  }
+  .hero-stat {
+    display: flex; align-items: baseline; gap: .5rem;
+    margin-bottom: 1.1rem;
+  }
+  .hero-stat-num {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .hero-stat-label { font-size: .8rem; color: rgba(255,255,255,.5); }
+  .hero-divider { height:1px; background:rgba(255,255,255,.08); margin:1.2rem 0; }
+  .hero-pill {
+    display: inline-block;
+    background: rgba(201,146,43,.15);
+    color: var(--gold2);
+    font-size: .75rem;
+    padding: .3rem .8rem;
+    border-radius: 20px;
+    margin: .2rem .2rem 0 0;
+  }
+
+  /* ─── SECTION COMMON ─── */
+  section { padding: 100px 8vw; }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: .8rem;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--navy);
+    margin-bottom: 1rem;
+  }
+  .section-title em { font-style:italic; color: var(--gold); }
+  .section-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 4rem;
+  }
+
+  /* ─── ABOUT ─── */
+  #about { background: var(--smoke); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .about-body p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 1.4rem;
+  }
+  .about-body p strong { color: var(--navy); }
+  .about-highlights {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+    margin-top: 2rem;
+  }
+  .highlight-card {
+    background: var(--white);
+    border-left: 3px solid var(--gold);
+    padding: 1.2rem 1.4rem;
+    border-radius: 0 4px 4px 0;
+  }
+  .highlight-card .num {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .highlight-card .lbl { font-size: .78rem; color: var(--muted); margin-top: .2rem; }
+
+  /* ─── EXPERIENCE ─── */
+  #experience { background: var(--cream); }
+  .exp-timeline { position: relative; }
+  .exp-timeline::before {
+    content:'';
+    position:absolute; left:11px; top:8px; bottom:8px;
+    width:2px; background:rgba(201,146,43,.2);
+  }
+  .exp-item {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 0 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  .exp-dot {
+    width: 24px; height: 24px;
+    background: var(--navy);
+    border: 3px solid var(--gold);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+    z-index: 1;
+    transition: transform .3s;
+  }
+  .exp-item:hover .exp-dot { transform: scale(1.3); }
+  .exp-body {
+    background: var(--white);
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 6px;
+    padding: 1.8rem 2rem;
+    transition: box-shadow .3s, transform .3s;
+    cursor: default;
+  }
+  .exp-item:hover .exp-body {
+    box-shadow: 0 8px 32px rgba(0,0,0,.08);
+    transform: translateX(4px);
+  }
+  .exp-header { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:.5rem; margin-bottom:.6rem; }
+  .exp-title { font-family:var(--font-display); font-size:1.15rem; font-weight:700; color:var(--navy); }
+  .exp-dates {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    color: var(--gold);
+    letter-spacing: .08em;
+    white-space: nowrap;
+  }
+  .exp-org { font-size: .85rem; color: var(--muted); margin-bottom: 1rem; font-weight:500; }
+  .exp-bullets { list-style: none; }
+  .exp-bullets li {
+    font-size: .9rem;
+    line-height: 1.65;
+    color: #444;
+    padding-left: 1.2rem;
+    position: relative;
+    margin-bottom: .5rem;
+  }
+  .exp-bullets li::before {
+    content:'▸';
+    position: absolute; left: 0;
+    color: var(--gold);
+    font-size: .7rem;
+    top: .3rem;
+  }
+
+  /* ─── SKILLS ─── */
+  #skills { background: var(--navy); }
+  #skills .section-title { color: var(--white); }
+  #skills .section-label { color: var(--gold2); }
+  #skills .section-sub { color: rgba(255,255,255,.5); }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+  .skill-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 6px;
+    padding: 1.8rem;
+    transition: border-color .3s, transform .3s, background .3s;
+  }
+  .skill-card:hover {
+    border-color: rgba(201,146,43,.4);
+    background: rgba(201,146,43,.06);
+    transform: translateY(-4px);
+  }
+  .skill-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+  .skill-name { font-weight: 600; color: var(--white); margin-bottom: .8rem; font-size:.95rem; }
+  .skill-tags { display:flex; flex-wrap:wrap; gap:.4rem; }
+  .skill-tag {
+    font-size: .72rem;
+    padding: .25rem .65rem;
+    border-radius: 20px;
+    background: rgba(255,255,255,.08);
+    color: rgba(255,255,255,.65);
+  }
+
+  /* ─── PORTFOLIO ─── */
+  #portfolio { background: var(--smoke); }
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+  .project-card {
+    background: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,.06);
+    transition: transform .3s, box-shadow .3s;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(0,0,0,.1);
+  }
+  .project-thumb {
+    height: 180px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .thumb-1 { background: linear-gradient(135deg, #0d1f3c 0%, #1e3a6e 100%); }
+  .thumb-2 { background: linear-gradient(135deg, #1e3a6e 0%, #c9922b 100%); }
+  .thumb-3 { background: linear-gradient(135deg, #c9922b 0%, #f0b94a 100%); }
+  .thumb-4 { background: linear-gradient(135deg, #142b52 0%, #0d1f3c 100%); }
+  .project-body { padding: 1.5rem; }
+  .project-tag {
+    display: inline-block;
+    font-size: .68rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: var(--font-mono);
+    margin-bottom: .6rem;
+  }
+  .project-name { font-family:var(--font-display); font-size:1.1rem; font-weight:700; color:var(--navy); margin-bottom:.5rem; }
+  .project-desc { font-size: .85rem; line-height: 1.65; color: var(--muted); }
+
+  /* ─── CONTACT ─── */
+  #contact { background: var(--cream); }
+  .contact-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items:start; }
+  .contact-info p { font-size:1rem; line-height:1.8; color:#444; margin-bottom:2rem; }
+  .contact-links { display:flex; flex-direction:column; gap:1rem; }
+  .contact-link {
+    display:flex; align-items:center; gap:1rem;
+    padding:1rem 1.4rem;
+    background:var(--white);
+    border:1px solid rgba(0,0,0,.06);
+    border-radius:6px;
+    font-size:.9rem;
+    color:var(--navy);
+    font-weight:500;
+    transition:border-color .2s, transform .2s, box-shadow .2s;
+  }
+  .contact-link:hover { border-color:var(--gold); transform:translateX(4px); box-shadow:0 4px 16px rgba(0,0,0,.06); }
+  .contact-link-icon { font-size:1.4rem; }
+  .contact-form { display:flex; flex-direction:column; gap:1.2rem; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .form-group { display:flex; flex-direction:column; gap:.4rem; }
+  .form-group label { font-size:.78rem; font-weight:500; letter-spacing:.06em; color:var(--muted); text-transform:uppercase; }
+  .form-group input, .form-group textarea {
+    padding:.85rem 1rem;
+    border:1.5px solid rgba(0,0,0,.1);
+    border-radius:4px;
+    font-family:var(--font-body);
+    font-size:.92rem;
+    color:var(--ink);
+    background:var(--white);
+    transition:border-color .2s, box-shadow .2s;
+    outline:none;
+    resize:vertical;
+  }
+  .form-group input:focus, .form-group textarea:focus {
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(201,146,43,.12);
+  }
+  .form-group textarea { min-height:130px; }
+  .btn-submit {
+    padding:.9rem 2rem;
+    background:var(--navy);
+    color:var(--white);
+    font-family:var(--font-body);
+    font-size:.9rem;
+    font-weight:500;
+    letter-spacing:.05em;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+    transition:background .2s, transform .2s;
+    align-self:flex-start;
+  }
+  .btn-submit:hover { background:var(--navy2); transform:translateY(-2px); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy);
+    padding: 2.5rem 8vw;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;
+  }
+  footer p { font-size:.8rem; color:rgba(255,255,255,.4); }
+  footer .foot-links { display:flex; gap:1.5rem; }
+  footer .foot-links a { font-size:.8rem; color:rgba(255,255,255,.4); transition:color .2s; }
+  footer .foot-links a:hover { color:var(--gold2); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width:768px) {
+    #hero { grid-template-columns: 1fr; }
+    .hero-content { padding: 120px 6vw 40px; }
+    .hero-visual { display:none; }
+    .about-grid, .contact-grid { grid-template-columns:1fr; gap:3rem; }
+    .about-highlights { grid-template-columns:1fr 1fr; }
+    .form-row { grid-template-columns:1fr; }
+    nav { padding:0 6vw; }
+    .nav-links { display:none; }
+    .hamburger { display:flex; }
+    section { padding:80px 6vw; }
+    .exp-timeline::before { display:none; }
+    .exp-item { grid-template-columns:1fr; }
+    .exp-dot { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">A<span>.</span>Hossain</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#portfolio">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="resume.pdf" class="nav-cta">Resume ↓</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" class="mob-link">About</a>
+  <a href="#experience" class="mob-link">Experience</a>
+  <a href="#skills" class="mob-link">Skills</a>
+  <a href="#portfolio" class="mob-link">Projects</a>
+  <a href="#contact" class="mob-link">Contact</a>
+  <a href="resume.pdf" class="mob-link" style="color:var(--gold2)">Resume ↓</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag reveal">EMU · College of Business · BBA Marketing</div>
+    <h1 class="hero-name reveal delay-1">
+      Amirah<br><em>Aribah</em><br>Hossain
+    </h1>
+    <p class="hero-tagline reveal delay-2">
+      Where data meets storytelling — building brands that resonate, campaigns that convert, and communities that last.
+    </p>
+    <div class="hero-actions reveal delay-3">
+      <a href="#contact" class="btn-primary">Let's Connect</a>
+      <a href="resume.pdf" class="btn-outline">Download Resume ↓</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card reveal delay-2">
+      <div class="hero-card-label">// quick stats</div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">4+</div>
+        <div class="hero-stat-label">years of experience</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label">platforms managed</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div>
+        <span class="hero-pill">Brand Strategy</span>
+        <span class="hero-pill">Digital Marketing</span>
+        <span class="hero-pill">Social Media</span>
+        <span class="hero-pill">Content Creation</span>
+        <span class="hero-pill">Analytics</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="reveal-left">
+      <p class="section-label">// about me</p>
+      <h2 class="section-title">Story-driven.<br><em>Data-backed.</em></h2>
+    </div>
+    <div class="about-body reveal-right">
+      <p>
+        I'm a <strong>sophomore Finance & Marketing student</strong> at Eastern Michigan University with a passion for the intersection of brand identity and human connection. Growing up across Bangladesh and Michigan gave me a global perspective — I've learned that great marketing isn't about selling, it's about <strong>understanding people</strong>.
+      </p>
+      <p>
+        From managing multi-platform social campaigns at EMU's Rec/IM to serving as a campus ambassador in the Admissions office, I've built real experience in <strong>content strategy, audience engagement, and data-informed storytelling</strong>. I'm driven by brands that mean something.
+      </p>
+      <p>
+        Outside of work I geek out over brand case studies, consumer psychology, and finding the perfect hook. I'm fluent in English and Bengali, conversational in Hindi and Urdu — and I believe speaking more languages means understanding more markets.
+      </p>
+      <div class="about-highlights">
+        <div class="highlight-card reveal delay-1">
+          <div class="num">4</div>
+          <div class="lbl">Languages spoken</div>
+        </div>
+        <div class="highlight-card reveal delay-2">
+          <div class="num">3+</div>
+          <div class="lbl">Social platforms managed</div>
+        </div>
+        <div class="highlight-card reveal delay-3">
+          <div class="num">Jan '29</div>
+          <div class="lbl">Graduating</div>
+        </div>
+        <div class="highlight-card reveal delay-4">
+          <div class="num">EMU</div>
+          <div class="lbl">College of Business</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <p class="section-label reveal">// experience</p>
+  <h2 class="section-title reveal">Where I've <em>Made an Impact</em></h2>
+  <p class="section-sub reveal">Real roles, real results — from digital campaigns to front-line client communication.</p>
+
+  <div class="exp-timeline">
+
+    <div class="exp-item reveal">
+      <div class="exp-dot"></div>
+      <div class="exp-body">
+        <div class="exp-header">
+          <div class="exp-title">Marketing & Promotions Assistant</div>
+          <div class="exp-dates">NOV 2025 – PRESENT</div>
+        </div>
+        <div class="exp-org">Eastern Michigan University Rec/IM · Ypsilanti, MI</div>
+        <ul class="exp-bullets">
+          <li>Execute content strategies across Instagram, Facebook, TikTok, and YouTube; track engagement metrics and assist in preparing reports to support marketing decisions.</li>
+          <li>Produce promotional copy and visual assets aligned with program objectives and audience targeting.</li>
+          <li>Manage editorial calendars and project tasks in Google Workspace, ensuring consistent and on-schedule execution.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-dot"></div>
+      <div class="exp-body">
+        <div class="exp-header">
+          <div class="exp-title">Campus Tour Guide</div>
+          <div class="exp-dates">JAN 2026 – PRESENT</div>
+        </div>
+        <div class="exp-org">EMU Admissions · Ypsilanti, MI</div>
+        <ul class="exp-bullets">
+          <li>Lead campus tours for prospective students and families, delivering structured presentations that convey institutional value to diverse audiences.</li>
+          <li>Serve as primary point of contact for international students, parents, and counselors, providing professional client communication.</li>
+          <li>Collect and summarize visitor feedback to support admissions reporting and outreach improvements.</li>
+          <li>Manage front desk operations: data entry, record keeping, email correspondence, and CRM database upkeep (Slate).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-dot"></div>
+      <div class="exp-body">
+        <div class="exp-header">
+          <div class="exp-title">Social Media Content Assistant</div>
+          <div class="exp-dates">2020 – 2021</div>
+        </div>
+        <div class="exp-org">Reach Community BD · Dhaka, Bangladesh</div>
+        <ul class="exp-bullets">
+          <li>Designed and scheduled social content for Instagram and Facebook using Canva, supporting community outreach goals.</li>
+          <li>Developed branded visual materials to maintain consistent organizational digital presence.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-dot"></div>
+      <div class="exp-body">
+        <div class="exp-header">
+          <div class="exp-title">Administrative & Event Assistant</div>
+          <div class="exp-dates">2021</div>
+        </div>
+        <div class="exp-org">CityMead · Dhaka, Bangladesh</div>
+        <ul class="exp-bullets">
+          <li>Maintained and organized Excel-based records and assisted in preparing reports for event planning and logistics.</li>
+          <li>Supported event execution including script coordination, vendor communication, and internal documentation.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label reveal">// skills</p>
+  <h2 class="section-title reveal">Tools of the <em>Trade</em></h2>
+  <p class="section-sub reveal">The platforms, tools, and competencies I bring to every project.</p>
+
+  <div class="skills-grid">
+    <div class="skill-card reveal delay-1">
+      <div class="skill-icon">📣</div>
+      <div class="skill-name">Digital Marketing</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Social Strategy</span>
+        <span class="skill-tag">Content Planning</span>
+        <span class="skill-tag">Engagement Analytics</span>
+        <span class="skill-tag">Campaign Execution</span>
+      </div>
+    </div>
+    <div class="skill-card reveal delay-2">
+      <div class="skill-icon">🎨</div>
+      <div class="skill-name">Design & Visual</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Canva</span>
+        <span class="skill-tag">Adobe Illustrator</span>
+        <span class="skill-tag">Adobe InDesign</span>
+        <span class="skill-tag">Brand Assets</span>
+      </div>
+    </div>
+    <div class="skill-card reveal delay-3">
+      <div class="skill-icon">📊</div>
+      <div class="skill-name">Data & Reporting</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Excel</span>
+        <span class="skill-tag">Google Sheets</span>
+        <span class="skill-tag">Performance Tracking</span>
+        <span class="skill-tag">Research Support</span>
+      </div>
+    </div>
+    <div class="skill-card reveal delay-1">
+      <div class="skill-icon">🌐</div>
+      <div class="skill-name">Platforms</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Instagram</span>
+        <span class="skill-tag">TikTok</span>
+        <span class="skill-tag">Facebook</span>
+        <span class="skill-tag">YouTube</span>
+        <span class="skill-tag">LinkedIn</span>
+      </div>
+    </div>
+    <div class="skill-card reveal delay-2">
+      <div class="skill-icon">💼</div>
+      <div class="skill-name">Productivity & Admin</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Google Workspace</span>
+        <span class="skill-tag">Microsoft Office</span>
+        <span class="skill-tag">Slate CRM</span>
+        <span class="skill-tag">Scheduling</span>
+      </div>
+    </div>
+    <div class="skill-card reveal delay-3">
+      <div class="skill-icon">🗣️</div>
+      <div class="skill-name">Communication</div>
+      <div class="skill-tags">
+        <span class="skill-tag">English (Fluent)</span>
+        <span class="skill-tag">Bengali (Fluent)</span>
+        <span class="skill-tag">Hindi (Conv.)</span>
+        <span class="skill-tag">Urdu (Conv.)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <p class="section-label reveal">// projects & portfolio</p>
+  <h2 class="section-title reveal">Selected <em>Work</em></h2>
+  <p class="section-sub reveal">Campaigns, content, and creative projects — each one a story.</p>
+
+  <div class="projects-grid">
+    <div class="project-card reveal delay-1">
+      <div class="project-thumb thumb-1">🏟️</div>
+      <div class="project-body">
+        <div class="project-tag">Social Media Strategy</div>
+        <div class="project-name">EMU Rec/IM Multi-Platform Campaign</div>
+        <div class="project-desc">Managed content strategy across Instagram, Facebook, TikTok, and YouTube. Tracked engagement metrics and prepared reports to optimize campaign performance and audience targeting.</div>
+      </div>
+    </div>
+    <div class="project-card reveal delay-2">
+      <div class="project-thumb thumb-2">🎓</div>
+      <div class="project-body">
+        <div class="project-tag">Brand & Communications</div>
+        <div class="project-name">EMU Admissions Outreach Program</div>
+        <div class="project-desc">Served as the face of EMU for prospective students — crafting consistent messaging for diverse international audiences and contributing to admissions reporting and outreach improvements.</div>
+      </div>
+    </div>
+    <div class="project-card reveal delay-3">
+      <div class="project-thumb thumb-3">🤝</div>
+      <div class="project-body">
+        <div class="project-tag">Community Marketing</div>
+        <div class="project-name">Reach Community BD — Digital Presence</div>
+        <div class="project-desc">Built and maintained branded social media presence for a Bangladesh-based community org. Designed visual materials in Canva, establishing a consistent and recognizable organizational identity.</div>
+      </div>
+    </div>
+    <div class="project-card reveal delay-4">
+      <div class="project-thumb thumb-4">📈</div>
+      <div class="project-body">
+        <div class="project-tag">Coming Soon</div>
+        <div class="project-name">Brand Strategy Capstone</div>
+        <div class="project-desc">A deep-dive brand audit and repositioning strategy for a real company — currently in development as part of my BBA coursework. Market research, competitive analysis, and full campaign brief.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div>
+      <p class="section-label reveal">// contact</p>
+      <h2 class="section-title reveal">Let's <em>Work Together</em></h2>
+      <div class="contact-info reveal">
+        <p>I'm always open to internship opportunities, collaborative projects, or just a great conversation about brands and marketing. Reach out — I'd love to connect.</p>
+      </div>
+      <div class="contact-links reveal">
+        <a href="mailto:ahossai2@emich.edu" class="contact-link">
+          <span class="contact-link-icon">✉️</span>
+          <span>ahossai2@emich.edu</span>
+        </a>
+        <a href="https://www.linkedin.com/in/amirahhossain" target="_blank" class="contact-link">
+          <span class="contact-link-icon">💼</span>
+          <span>linkedin.com/in/amirahhossain</span>
+        </a>
+        <a href="resume.pdf" class="contact-link">
+          <span class="contact-link-icon">📄</span>
+          <span>Download Resume</span>
+        </a>
+      </div>
+    </div>
+    <div class="reveal-right">
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" placeholder="Jane" required>
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" placeholder="Smith" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="jane@company.com" required>
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" placeholder="Internship opportunity / Collaboration">
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" placeholder="Tell me about what you're working on..." required></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Send Message →</button>
+        <div id="form-success" style="display:none;color:#2c6b4f;font-size:.88rem;margin-top:.5rem;">✓ Thanks! I'll get back to you soon.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Amirah Aribah Hossain · Eastern Michigan University</p>
+  <div class="foot-links">
+    <a href="#hero">Back to top ↑</a>
+    <a href="mailto:ahossai2@emich.edu">Email</a>
+    <a href="https://www.linkedin.com/in/amirahhossain" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+  /* NAV SCROLL */
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  /* HAMBURGER */
+  const hb = document.getElementById('hamburger');
+  const mm = document.getElementById('mobileMenu');
+  hb.addEventListener('click', () => mm.classList.toggle('open'));
+  document.querySelectorAll('.mob-link').forEach(l => l.addEventListener('click', () => mm.classList.remove('open')));
+
+  /* SCROLL REVEAL */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => io.observe(el));
+
+  /* FORM */
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('form-success').style.display = 'block';
+    e.target.reset();
+    setTimeout(() => document.getElementById('form-success').style.display = 'none', 4000);
+  }
+
+  /* HERO PARALLAX (subtle) */
+  window.addEventListener('scroll', () => {
+    const hero = document.getElementById('hero');
+    if (window.scrollY < window.innerHeight) {
+      hero.style.backgroundPositionY = (window.scrollY * 0.3) + 'px';
+    }
+  });
+</script>
+</body>
+</html>
